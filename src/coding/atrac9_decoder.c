@@ -10,7 +10,7 @@ typedef struct {
     uint8_t* buf;
     int buf_size;
 
-    int16_t* sbuf;
+    float* sbuf;
     int discard;
 
     atrac9_config config;
@@ -62,8 +62,7 @@ void* init_atrac9(atrac9_config* cfg) {
     data->buf = calloc(data->buf_size, sizeof(uint8_t));
     if (!data->buf) goto fail;
 
-    // while ATRAC9 uses float internally, Sony's API only returns PCM16
-    data->sbuf = calloc(data->info.channels * data->info.frame_samples * data->info.frames_per_superframe, sizeof(int16_t));
+    data->sbuf = calloc(data->info.channels * data->info.frame_samples * data->info.frames_per_superframe, sizeof(float));
     if (!data->sbuf) goto fail;
 
     data->discard = cfg->encoder_delay;
@@ -94,7 +93,7 @@ static bool read_frame(VGMSTREAM* v) {
 static int decode(VGMSTREAM* v) {
     atrac9_codec_data* data = v->codec_data;
 
-    int samples = atrac9_decode_superframe_pcm16(data->handle, data->buf, data->buf_size, data->sbuf);
+    int samples = atrac9_decode_superframe(data->handle, data->buf, data->buf_size, data->sbuf);
     if (samples < 0)  {
         VGM_LOG("ATRAC9: decode error %i\n", samples);
         return false;
@@ -117,7 +116,7 @@ static bool decode_frame_atrac9(VGMSTREAM* v) {
     decode_state_t* ds = v->decode_state;
     atrac9_codec_data* data = v->codec_data;
 
-    sbuf_init_s16(&ds->sbuf, data->sbuf, samples, v->channels);
+    sbuf_init_f16(&ds->sbuf, data->sbuf, samples, v->channels);
     ds->sbuf.filled = samples;
 
     if (data->discard) {
@@ -197,7 +196,7 @@ size_t atrac9_bytes_to_samples_cfg(size_t bytes, uint32_t config_data) {
 }
 
 const codec_info_t atrac9_decoder = {
-    .sample_type = SFMT_S16, //TODO: decoder doesn't return float (to match Sony's lib apparently)
+    .sample_type = SFMT_F16,
     .decode_frame = decode_frame_atrac9,
     .free = free_atrac9,
     .reset = reset_atrac9,
