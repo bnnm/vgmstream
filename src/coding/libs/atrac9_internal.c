@@ -248,7 +248,7 @@ static int apply_band_extension(at9_channel_t* channel, at9_block_t* block, at9_
         bex_scale_noise(spectrum, end_qu, qu_count, scales);
     }
     else {
-        // fill BEX spectrum with mirrored coefs 
+        // fill BEX spectrum with mirrored coefs
         bex_mirror(spectrum, group_a_coef, group_b_coef);
         bex_mirror(spectrum, group_b_coef, group_c_coef);
         bex_mirror(spectrum, group_c_coef, end_coef);
@@ -642,7 +642,7 @@ static void unpack_spectrum_vib(at9_core_t* core, bitstream_t* is, at9_channel_t
         if (wl_index <= 6 && !is_high_sample_rate(core)) {
             int qu_coefs = 2;
             const at9_codebook_t* codebook = &spectrum_codebooks_vib[wl_index - 1];
-            
+
             int groups = qu_coefs >> codebook->value_shift;
             for (int i = 0; i < groups; i++) {
                 symbols[i] = read_huffman_symbol(is, codebook);
@@ -906,7 +906,7 @@ static void unpack_scalefactors_distance_base(bitstream_t* is, int qu_count, uin
 // inline'd unpack_idsf_1_at9?
 static void unpack_scalefactors_offset(bitstream_t* is, int qu_count, uint8_t* sf_indexes) {
     int bits = read_bits(is, 2) + 2;
- 
+
     if (bits <= 4) {
         int offset = read_bits(is, 5);
         for (int qu = 0; qu < qu_count; qu++) {
@@ -1095,7 +1095,7 @@ static int unpack_band_info(at9_core_t* core, bitstream_t* is, at9_block_t* bloc
     return AT9_OK;
 }
 
-/* read gradient curve that configures bitalloc */ 
+/* read gradient curve that configures bitalloc */
 // OG: unpack_gradient_at9
 static int unpack_gradient(bitstream_t* is, at9_block_temp_t* block_temp, at9_block_t* block) {
 
@@ -1278,7 +1278,7 @@ static int unpack_block_std(at9_core_t* core, bitstream_t* is, at9_block_temp_t*
         unpack_spectrum_fine(is, channel_temp, qu_count);
     }
 
-    // intensity stereo: copy main channel's upper QUs to the other channel (L->R or R->L) 
+    // intensity stereo: copy main channel's upper QUs to the other channel (L->R or R->L)
     if (block->type == AT9_BLOCK_STEREO) {
         const float* src_sp = channel_temps[block_temp->main_channel].spectrum;
         float* dst_sp = channel_temps[!block_temp->main_channel].spectrum;
