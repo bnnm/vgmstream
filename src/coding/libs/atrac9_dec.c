@@ -109,6 +109,7 @@ struct atrac9_handle_t {
     int channel_count;                                          // total output channels
     int superframe_size;                                        // total size
     int stream_count;
+    int dmc_channels;
 
     // state
     at9_core_t* cores;                                          // frame + block state
@@ -387,6 +388,7 @@ atrac9_handle_t* atrac9_init(const uint8_t* config_data) {
     ctx->channels = calloc(ctx->channel_count, sizeof(at9_channel_t));
     if (!ctx->cores || !ctx->channels)
         goto fail;
+    ctx->dmc_channels = info.dmc_channels;
 
     for (int s = 0; s < ctx->stream_count; s++) {
         at9_core_t* core = &ctx->cores[s];
@@ -517,7 +519,37 @@ int atrac9_get_info(atrac9_handle_t* ctx, atrac9_info_t* dst) {
     dst->superframe_size = ctx->superframe_size;
     dst->frames_per_superframe = ctx->cores[0].frames_per_superframe;
     dst->frame_samples = ctx->cores[0].frame_samples;
-    dst->dmc_mode = ctx->stream_count > 1;
+    dst->dmc_mode = ctx->dmc_channels > 0;
+
+    return AT9_OK;
+}
+
+int atrac9_get_config_info(const uint8_t* config_data, atrac9_info_t* dst) {
+    if (!config_data || !dst)
+        return AT9_ERROR_PARAMS;
+
+    at9_config_info_t info = {0};
+    int res = parse_config_data(config_data, &info);
+    if (res < 0)
+        return AT9_ERROR_PARAMS;
+
+    int channels = channel_config_table[info.channel_config_index].channels;
+    int superframe_size = info.frame_size << info.superframe_index;
+    int sample_rate = sample_rate_table[info.profile_index];
+    int samples_per_superframe = 1 << info.superframe_index;
+    int frame_samples = frame_samples_table[info.profile_index];
+
+    if (info.dmc_channels) {
+        channels = info.dmc_channels;
+        superframe_size *= info.dmc_channels;
+    }
+
+    dst->channels = channels;
+    dst->sample_rate = sample_rate;
+    dst->superframe_size = superframe_size;
+    dst->frames_per_superframe = samples_per_superframe;
+    dst->frame_samples = frame_samples;
+    dst->dmc_mode = info.dmc_channels > 0;
 
     return AT9_OK;
 }

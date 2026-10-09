@@ -56,5 +56,6 @@ typedef struct {
 } atrac9_info_t;
 
 int atrac9_get_info(atrac9_handle_t* ctx, atrac9_info_t* dst);
+int atrac9_get_config_info(const uint8_t* config_data, atrac9_info_t* dst);
 
 #endif
