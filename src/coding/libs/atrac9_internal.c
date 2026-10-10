@@ -19,7 +19,7 @@
 
 
 //-----------------------------------------------------------------------------
-// COMMON: BAND EXTENSION
+// UNPACK + TRANSFORM: BAND EXTENSION
 
 /* this is called in transform and unpacking, though uses BEX (transform) tables */
 // OG: set_bex_info
@@ -282,7 +282,7 @@ static int apply_band_extension(at9_channel_t* channel, at9_block_t* block, at9_
 //-----------------------------------------------------------------------------
 // TRANSFORM: IMDCT
 
-/* Sony's IMDCT, despite the debug symbols it may actually not be Chebyshev (radix-2 DCT-IV?).
+/* Sony's IMDCT, despite the debug symbols it may actually not be a Chebyshev algorithm? (radix-2 DCT-IV?).
  * OG has 3 copies that only seem to differ in tables and unrolled loops. */
 static void imdct_transform(float* spectrum, float* samples, float* overlap, int n,
         const float* twiddles, const float* post_twiddles, const float* post_scales, const float* window) {

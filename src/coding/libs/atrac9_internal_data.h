@@ -13,7 +13,7 @@ const uint16_t qu_coef_start_table[31] = {
     64, 72, 80, 88, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 256
 };
 
-/* V3: same but vibration blocks only have 16 qu of 2 coefs */
+/* V3: same, but vibration blocks only have 16 qu of 2 coefs */
 const uint16_t qu_coef_start_table_vib[31] = {
     0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
     32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32

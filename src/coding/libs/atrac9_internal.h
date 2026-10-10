@@ -84,17 +84,17 @@ typedef struct {
 /* temp block data, that can be reused for all blocks during decode */
 // OG: SceAbTmp (inside SceAt9DecTmpWork)
 typedef struct {
-    int gradient[AT9_MAX_QUS];              // bit allocation gradient (OG: a_grad)
-    int wl_adjust[AT9_MAX_QUS];             // extra word length bits (OG: a_adwl)
-    int frame_id;                           // 0 = first frame in superframe
-    int gradient_mode;
+    int gradient[AT9_MAX_QUS];              // (OG: a_grad)
+    int wl_adjust[AT9_MAX_QUS];             // (OG: a_adwl)
+    int frame_id;                           // 0 = first frame in superframe (OG: frame_id)
+    int gradient_mode;                      // (OG: grad_mode)
     int gradient_qu_lo;                     // (OG: grad_qu_l)
     int gradient_qu_hi;                     // (OG: grad_qu_h)
     int gradient_os_lo;                     // (OG: grad_os_l)
     int gradient_os_hi;                     // (OG: grad_os_h)
     int adjust_qu_count;                    // (OG: nadjqus)
     uint8_t stereo_signs[AT9_MAX_QUS];      // (OG: is_phase)
-    int main_channel;                       // (OG: main_ch, 0 = left, 1 = right)
+    int main_channel;                       // 0 = left, 1 = right (OG: main_ch)
 } at9_block_temp_t;
 
 /* temp channel data (reused per block channel during decode) */

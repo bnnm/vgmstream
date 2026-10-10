@@ -6,6 +6,7 @@
 /* Decodes Sony's ATRAC9, a transform-based (MDCT).
  */
 
+//TO-DO: remove?
 #define ATRAC9_CONFIG_SIZE          4
 #define ATRAC9_MAX_SUPERFRAME_SIZE  0x800 // 0x200*4
 #define ATRAC9_MAX_FRAME_SAMPLES    256 // single frame only

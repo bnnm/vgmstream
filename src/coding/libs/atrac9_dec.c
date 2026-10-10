@@ -93,8 +93,8 @@ static const uint16_t frame_samples_table[16] = {
     64, 64, 128, 128, 128, 256, 256, 256
 };
 
-/* >7 entries don't exit in libSceSnds, and it only allow 1/4/7 (12000/24000/48000). Encoders also only
- * make those, plus no other sample rates seem to exist in the wild. Code paths for other modes look correct tho. */
+/* >7 entries don't exist in libSceSnds, and it only allows 1/4/7 (12000/24000/48000). Encoders also only make
+ * those rates, plus no other sample rates seem to exist in the wild. Code paths for other modes look correct tho. */
 // OG: CSWTCH_19 (0..7 only)
 static const int sample_rate_table[16] = {
     11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000,
@@ -115,8 +115,8 @@ struct atrac9_handle_t {
     at9_core_t* cores;                                          // frame + block state
     at9_channel_t* channels;                                    // channel state
 
-    at9_block_temp_t block_temp;                                // OG: SceAt9DecTmpWork.abTmp (block state)
-    at9_channel_temp_t channel_temps[AT9_MAX_BLOCK_CHANNELS];   // OG: SceAt9DecTmpWork.acTmp
+    at9_block_temp_t block_temp;                                // (OG: SceAt9DecTmpWork.abTmp)
+    at9_channel_temp_t channel_temps[AT9_MAX_BLOCK_CHANNELS];   // (OG: SceAt9DecTmpWork.acTmp)
 };
 
 
